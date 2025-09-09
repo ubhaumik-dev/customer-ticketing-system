@@ -2,6 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
 interface dataType{
   title: string,
@@ -12,6 +13,7 @@ interface dataType{
   time: string
 }
 const SubmitTicket = () => {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       //id:crypto.randomUUID(),
@@ -54,7 +56,7 @@ const SubmitTicket = () => {
 
       data.push(values);
       localStorage.setItem('TicketData', JSON.stringify(data));
-    
+      navigate('/')
     },
   });
   return (
