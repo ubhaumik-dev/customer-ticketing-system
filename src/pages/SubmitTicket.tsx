@@ -3,14 +3,26 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { v4 as uuidv4 } from 'uuid';
 
-
+interface dataType{
+  title: string,
+  description:string,
+  priority:string,
+  id: string,
+  date: string,
+  time: string
+}
 const SubmitTicket = () => {
   const formik = useFormik({
     initialValues: {
-      id: '',
+      //id:crypto.randomUUID(),
+      //date: new Date().toLocaleDateString(),
+      //time: new Date().toLocaleTimeString(),
       title: '',
       description: '',
-      priority:''
+      priority:'',
+      id:'',
+      date:'',
+      time:''
     },
     validationSchema: Yup.object({
       title: Yup.string()
@@ -21,15 +33,24 @@ const SubmitTicket = () => {
         .required('Required'),
       priority: Yup.string().required('Required'),
     }),
-    onSubmit: values => {
+    onSubmit: (values: dataType ) => {
       //alert(JSON.stringify(values, null, 2));
-      //const id= crypto.randomUUID();
+      const id= crypto.randomUUID();
+      const date = new Date().toLocaleDateString();
+      const time= new Date().toLocaleTimeString();
+      //console.log(values)
+      //console.log(typeof values);
+      var obj2 = {id:id, date: date, time: time};
+      Object.assign(values,obj2);
+      //values['id'] = id;
+      //values['date'] = date;
+      //values['time'] = time;
       let data = JSON.parse(localStorage.getItem('TicketData') || '[]')
       if(!Array.isArray(data))
       {
         data =[];
       }
-      console.log(data)
+      //console.log(data)
 
       data.push(values);
       localStorage.setItem('TicketData', JSON.stringify(data));
