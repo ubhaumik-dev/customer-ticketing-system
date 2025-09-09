@@ -1,36 +1,53 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const SubmitTicket = () => {
   const formik = useFormik({
     initialValues: {
+      id: '',
       title: '',
       description: '',
       priority:''
     },
     validationSchema: Yup.object({
-      firstName: Yup.string()
-        .max(15, 'Must be 15 characters or less')
+      title: Yup.string()
+        .min(10, 'Must be 10 characters or more')
         .required('Required'),
-      lastName: Yup.string()
-        .max(20, 'Must be 20 characters or less')
+      description: Yup.string()
+        .min(10,'Must be atleast 10 characters')
         .required('Required'),
-      email: Yup.string().email('Invalid email address').required('Required'),
+      priority: Yup.string().required('Required'),
     }),
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
+      //alert(JSON.stringify(values, null, 2));
+      //const id= crypto.randomUUID();
+      let data = JSON.parse(localStorage.getItem('TicketData') || '[]')
+      if(!Array.isArray(data))
+      {
+        data =[];
+      }
+      console.log(data)
+
+      data.push(values);
+      localStorage.setItem('TicketData', JSON.stringify(data));
+    
     },
   });
   return (
-    <form onSubmit={formik.handleSubmit}  className='flex flex-col h-fit w-fit gap-8 border border-black  rounded-md m-auto py-6 px-4 bg-fuchsia-200'>
+    <>
+    <div className='w-screen h-screen bg-fuchsia-50  xl:py-2'>
+    <h1 className='text-fuchsia-600 text-center font-bold text-4xl my-auto'>Submit Ticket</h1>
+    <form onSubmit={formik.handleSubmit}  className='flex flex-col h-fit w-fit border border-black  rounded-md mx-auto my-auto py-6 px-4 bg-fuchsia-200 mt-10 max-h-fit md:w-1/2'>
         
       <label htmlFor="title">title</label>
       <input
         id="title"
         name="title"
         type="text"
-        className='h-10 w-fit px-2 bg-white rounded-md border border-gray-300 focus:outline-violet-900'
+        className='h-10 w-full px-2 bg-white rounded-md border border-gray-300 focus:outline-violet-900'
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.title}
@@ -39,11 +56,12 @@ const SubmitTicket = () => {
         <div>{formik.errors.title}</div>
       ) : null}
 
-      <label htmlFor="description">Description</label>
+      <label htmlFor="description" className='mt-5'>Description</label>
       <textarea
         id="description"
         name="description"
-        className='h-20 w-full bg-white rounded-md px-2 py-1 border border-gray-300 focus:outline-violet-900'
+        rows={4}
+        className=' w-full resize-none bg-white rounded-md px-2 py-1 md:py-4 xl:py-8 border border-gray-300 focus:outline-violet-900'
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.description}
@@ -51,15 +69,16 @@ const SubmitTicket = () => {
       {formik.touched.description && formik.errors.description ? (
         <div>{formik.errors.description}</div>
       ) : null}
-
+<label className='mt-5'> Priority</label>
    <select
             name='priority'
-            className='bg-white rounded-md border border-gray-300 focus:outline-violet-900'
+            className='bg-white h-10 rounded-md border border-gray-300  focus:outline-violet-900 lg:w-1/2'
             value={formik.values.priority}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-          > Priority
-            <option value="Low" className='rounded' id='low'>Low</option>
+           
+          > 
+            <option value="Low" className='rounded' id='low' defaultChecked>Low</option>
             <option value="Medium" className='rounded' id='medium'>Medium</option>
             <option value="High" className='rounded' id='high'>High</option>
           </select>
@@ -67,8 +86,10 @@ const SubmitTicket = () => {
         <div>{formik.errors.priority}</div>
       ) : null}
 
-      <button type="submit" className='h-fit w-fit px-6 py-2 bg-fuchsia-500 rounded-md text-white cursor-pointer hover:bg-fuchsia-700'>Submit</button>
+      <button type="submit" className='h-fit w-fit px-6 py-2 bg-fuchsia-500 rounded-md mt-5 text-white cursor-pointer hover:bg-fuchsia-700 lg:m-auto lg:mt-7'>Submit</button>
     </form>
+    </div>
+  </>
   );
 };
 export default SubmitTicket
