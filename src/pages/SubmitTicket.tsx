@@ -8,6 +8,7 @@ interface dataType{
   title: string,
   description:string,
   priority:string,
+  status:string,
   id: string,
   date: string,
   time: string
@@ -22,9 +23,10 @@ const SubmitTicket = () => {
       title: '',
       description: '',
       priority:'',
+      status:'open',
       id:'',
       date:'',
-      time:''
+      time:'',
     },
     validationSchema: Yup.object({
       title: Yup.string()
@@ -37,7 +39,7 @@ const SubmitTicket = () => {
     }),
     onSubmit: (values: dataType ) => {
       //alert(JSON.stringify(values, null, 2));
-      const id= crypto.randomUUID();
+      const id= crypto.randomUUID().slice(0,5);
       const date = new Date().toLocaleDateString();
       const time= new Date().toLocaleTimeString();
       //console.log(values)
@@ -61,11 +63,11 @@ const SubmitTicket = () => {
   });
   return (
     <>
-    <div className='w-screen h-screen bg-fuchsia-50  xl:py-2'>
-    <h1 className='text-fuchsia-600 text-center font-bold text-4xl my-auto'>Submit Ticket</h1>
-    <form onSubmit={formik.handleSubmit}  className='flex flex-col h-fit w-fit border border-black  rounded-md mx-auto my-auto py-6 px-4 bg-fuchsia-200 mt-10 max-h-fit md:w-1/2'>
+    <div className='w-screen h-screen bg-primary-1  xl:py-2'>
+    <h1 className='text-quaternary-1 text-center font-bold text-4xl my-auto'>Submit Ticket</h1>
+    <form onSubmit={formik.handleSubmit}  className='flex flex-col h-fit w-fit border border-black  rounded-md mx-auto my-auto py-6 px-4 bg-quaternary-1 mt-10 max-h-fit md:w-1/2'>
         
-      <label htmlFor="title">title</label>
+      <label htmlFor="title" className='text-primary-1'>title</label>
       <input
         id="title"
         name="title"
@@ -79,7 +81,7 @@ const SubmitTicket = () => {
         <div>{formik.errors.title}</div>
       ) : null}
 
-      <label htmlFor="description" className='mt-5'>Description</label>
+      <label htmlFor="description" className='mt-5 text-primary-1'>Description</label>
       <textarea
         id="description"
         name="description"
@@ -92,7 +94,7 @@ const SubmitTicket = () => {
       {formik.touched.description && formik.errors.description ? (
         <div>{formik.errors.description}</div>
       ) : null}
-<label className='mt-5'> Priority</label>
+<label className='mt-5 text-primary-1'> Priority</label>
    <select
             name='priority'
             className='bg-white h-10 rounded-md border border-gray-300  focus:outline-violet-900 lg:w-1/2'
@@ -108,8 +110,24 @@ const SubmitTicket = () => {
       {formik.touched.priority && formik.errors.priority ? (
         <div>{formik.errors.priority}</div>
       ) : null}
+      <label className='mt-5 text-primary-1'> Status </label>
+   <select
+            name='status'
+            className='bg-white h-10 rounded-md border border-gray-300  focus:outline-violet-900 lg:w-1/2'
+            value={formik.values.status}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+           
+          > 
+            <option value="Open" className='rounded' id='low' defaultChecked>Open</option>
+            <option value="Pending" className='rounded' id='medium'>Pending</option>
+            <option value="Resolved" className='rounded' id='high'>Resolved</option>
+          </select>
+      {formik.touched.status && formik.errors.status ? (
+        <div>{formik.errors.status}</div>
+      ) : null}
 
-      <button type="submit" className='h-fit w-fit px-6 py-2 bg-fuchsia-500 rounded-md mt-5 text-white cursor-pointer hover:bg-fuchsia-700 lg:m-auto lg:mt-7'>Submit</button>
+      <button type="submit" className='h-fit w-fit px-6 py-2 bg-primary-1 rounded-md mt-5 text-white cursor-pointer lg:m-auto lg:mt-7'>Submit</button>
     </form>
     </div>
   </>
