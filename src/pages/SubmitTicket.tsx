@@ -1,7 +1,7 @@
-import React from 'react';
+
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { v4 as uuidv4 } from 'uuid';
+
 import { useNavigate } from 'react-router-dom';
 
 interface dataType{
@@ -22,7 +22,7 @@ const SubmitTicket = () => {
       //time: new Date().toLocaleTimeString(),
       title: '',
       description: '',
-      priority:'',
+      priority:'low',
       status:'open',
       id:'',
       date:'',

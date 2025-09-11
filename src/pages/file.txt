@@ -1,3 +1,0 @@
- id:crypto.randomUUID(),
-      date: new Date().toLocaleDateString(),
-      time: new Date().toLocaleTimeString(),
