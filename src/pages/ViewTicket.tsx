@@ -52,8 +52,8 @@ const ViewTicket = () => {
   }, [])
   
   return (
-    <div className='w-screen h-auto max-h-auto bg-primary-1 flex flex-col items-center md:h-screen xl:py-2'>
-    <h1 className='text-quaternary-1 text-center font-bold text-3xl md:text-4xl mt-5'>Submit Ticket</h1>
+    <div className='w-auto h-auto max-h-auto bg-primary-1 flex flex-col items-center md:h-auto xl:py-2'>
+    <h1 className='text-quaternary-1 text-center font-bold text-3xl md:text-4xl mt-5'>Ticket ID {id}</h1>
     <form className='flex flex-col h-fit w-fit border border-black space-y-2  rounded-md mx-auto my-4 py-6 px-4 bg-quaternary-1 mt-10 max-h-fit  md:w-1/2'>
        <div className='flex flex-row'> 
          <p className='font-bold'> ID </p> 

@@ -16,13 +16,14 @@ interface dataProps{
   time: string
 }
   const navigate = useNavigate();
-  const [data, setData] = useState<dataProps[]>(JSON.parse(localStorage.getItem('TicketData') || '[]'))
-  const [openPopUp, setOpenPopUp] = useState(false);
-  const [deleteId, setdeleteId] = useState('');
+  const[data, setData] = useState<dataProps[]>(JSON.parse(localStorage.getItem('TicketData') || '[]'))
+  const[openPopUp, setOpenPopUp] = useState(false);
+  const[deleteId, setdeleteId] = useState('');
   const[updateId, setUpdateId] = useState('');
   const[updateValue, setUpdateValue] = useState('')
   const[openUpdatePopup, setOpenUpdatePopup] = useState(false)
-
+  const[changedUpdated, setChangedUpdated] = useState(updateValue);
+  //const inputRef = useRef();
   useEffect(() => {
     if(openPopUp || openUpdatePopup){
       document.body.style.overflow ='hidden'
@@ -32,10 +33,8 @@ interface dataProps{
     }
    
   }, [openPopUp, openUpdatePopup])
-function showPopup()
-{
-  setOpenPopUp(true);
-}
+
+
 function handleDelete(deleteId:string)
 {
   setData(data=> { 
@@ -46,22 +45,34 @@ function handleDelete(deleteId:string)
   setOpenPopUp(false)
 }
 
-function updateIdFunc(updateId:string)
-{
- //console.log("updateId is", updateId) 
- const storedData = localStorage.getItem('TicketData')
- //console.log(storedData);
- if(storedData)
- {
-  const parsedData =JSON.parse(storedData);
-  //console.log(parsedData)
-  let filteredData: dataProps[] = parsedData.filter((ticket:dataProps) => ticket.id === updateId );
-  //console.log(filteredData)
-  //console.log(" filteredData[0].status", filteredData[0].status)
-  setUpdateValue(filteredData[0].status)
- }
- 
+function handleUpdate(updateId:string){
+  //console.log("updateId", updateId)
+  const storedData = localStorage.getItem('TicketData');
+  if(storedData){
+    const parsedData = JSON.parse(storedData);
+    const filteredData:dataProps[] = parsedData.filter((ticket:dataProps)=> ticket.id=== updateId)
+    setUpdateValue(filteredData[0].status)
+  }
+  //console.log("updateValue is", updateValue)
 }
+
+
+function changeUpdateInLocalStorage()
+{
+  console.log("updateValue is", updateValue)
+  console.log("updateId is", updateId)
+  const item = localStorage.getItem('TicketData');
+  //console.log("typeof item", typeof item);
+  if(item)
+  {
+    const parsedData = JSON.parse(item);
+    //console.log(parsedData)
+    //console.log(typeof parsedData)
+    const filteredData:dataProps[] = parsedData.filter((ticket:dataProps)=> ticket.id=== updateId)
+    //console.log(filteredData[0])
+  }
+}
+
   
   return (
     <div >
@@ -90,15 +101,19 @@ function updateIdFunc(updateId:string)
 {
   updateId!== null  &&  openUpdatePopup &&
   <div className='fixed inset-0 bg-black/50 grid place-items-center'>
-    <div className='h-auto w-fit bg-quaternary-1 px-10 py-8 rounded-md space-y-4'>
-  <MultiplicationSignIcon size={30} className='cursor-pointer place-self-end-safe' onClick={()=>{setOpenUpdatePopup(false);updateIdFunc(updateId)} } /> 
+    <div className='h-auto w-auto bg-quaternary-1 px-10 py-8 rounded-md space-y-4 md:px-14'>
+  <MultiplicationSignIcon size={30} className='cursor-pointer place-self-end-safe' onClick={()=>{setOpenUpdatePopup(false)} } /> 
       <div className='flex flex-col gap-y-8'> 
       <p> Update status for ID: {updateId} ?</p>
-      <select className='h-fit w-fit px-2 py-1 rounded-md border border-primary-1' defaultValue={updateValue}>
+      <select className='h-fit w-fit px-2 py-1 rounded-md border border-primary-1'  defaultValue={updateValue} onChange={(e)=>{handleUpdate(e.target.value)}} >
         <option> Open </option>
         <option> Pending </option>
         <option> Resolved </option>
       </select>
+      </div>
+      <div className='flex flex-row justify-evenly md:justify-between'> 
+      <button className='h-fit w-fit px-6 py-2 bg-quaternary-1 border border-primary-1 rounded-sm text-primary-1 font-bold'> Cancel</button>
+      <button className='h-fit w-fit px-8 py-2 bg-primary-1 rounded-sm text-quaternary-1 font-bold cursor-pointer' onClick={()=>{setOpenUpdatePopup(false);changeUpdateInLocalStorage();} }> OK</button>
       </div>
     </div>
   </div>
@@ -117,9 +132,9 @@ function updateIdFunc(updateId:string)
     </select>
      <label className='mt-2'> Status</label>
     <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white'>
-      <option> Open</option>
-      <option> Pending</option>
-      <option> Resolved</option>
+      <option value='Open'> Open</option>
+      <option value='Pending'> Pending</option>
+      <option value='Resolved'> Resolved</option>
     </select>
     </div>
    </div>
@@ -136,8 +151,8 @@ function updateIdFunc(updateId:string)
         <p className='max-w-6/7 overflow-hidden truncate'>{item.title} </p>
         <div className='flex gap-2 max-w-fit'> 
         <Link className='text-primary-1 font-bold h-fit w-fit px-2 py-2 border border-primary-1 rounded-md' to={`/viewTicket/:${item.id}`}>View</Link>
-        <button className='text-white font-bold h-fit w-fit px-2 py-2 bg-primary-1 rounded-md cursor-pointer hover:bg-blue-950' onClick={()=>{setUpdateId(item.id); setOpenUpdatePopup(true)}}>Update Status</button>
-        <Delete02Icon size={30} className='mt-2 cursor-pointer' onClick={()=>{showPopup(); setdeleteId(item.id)}}/>
+        <button className='text-white font-bold h-fit w-fit px-2 py-2 bg-primary-1 rounded-md cursor-pointer hover:bg-blue-950' onClick={()=>{setUpdateId(item.id); setOpenUpdatePopup(true); handleUpdate(item.id)}}>Update Status</button>
+        <Delete02Icon size={30} className='mt-2 cursor-pointer' onClick={()=>{setOpenPopUp(true); setdeleteId(item.id)}}/>
         </div>
         <div>
           <p>Status:  {item.status}</p>
