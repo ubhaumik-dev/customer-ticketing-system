@@ -1,12 +1,12 @@
 import  { useEffect, useState } from 'react'
 import Oops from '../components/Oops';
-import { Delete02Icon } from "hugeicons-react";
+import { Delete02Icon, MultiplicationSignIcon } from "hugeicons-react";
 import '../App.css'
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 const Home = () => {
   
-interface dataType{
+interface dataProps{
   title: string,
   description:string,
   status:string,
@@ -16,19 +16,22 @@ interface dataType{
   time: string
 }
   const navigate = useNavigate();
-  const [data, setData] = useState<dataType[]>(JSON.parse(localStorage.getItem('TicketData') || '[]'))
+  const [data, setData] = useState<dataProps[]>(JSON.parse(localStorage.getItem('TicketData') || '[]'))
   const [openPopUp, setOpenPopUp] = useState(false);
   const [deleteId, setdeleteId] = useState('');
+  const[updateId, setUpdateId] = useState('');
+  const[updateValue, setUpdateValue] = useState('')
+  const[openUpdatePopup, setOpenUpdatePopup] = useState(false)
 
   useEffect(() => {
-    if(openPopUp){
+    if(openPopUp || openUpdatePopup){
       document.body.style.overflow ='hidden'
     }
     else{
       document.body.style.overflow ='unset'
     }
    
-  }, [openPopUp])
+  }, [openPopUp, openUpdatePopup])
 function showPopup()
 {
   setOpenPopUp(true);
@@ -43,7 +46,22 @@ function handleDelete(deleteId:string)
   setOpenPopUp(false)
 }
 
-
+function updateIdFunc(updateId:string)
+{
+ //console.log("updateId is", updateId) 
+ const storedData = localStorage.getItem('TicketData')
+ //console.log(storedData);
+ if(storedData)
+ {
+  const parsedData =JSON.parse(storedData);
+  //console.log(parsedData)
+  let filteredData: dataProps[] = parsedData.filter((ticket:dataProps) => ticket.id === updateId );
+  //console.log(filteredData)
+  //console.log(" filteredData[0].status", filteredData[0].status)
+  setUpdateValue(filteredData[0].status)
+ }
+ 
+}
   
   return (
     <div >
@@ -61,15 +79,30 @@ function handleDelete(deleteId:string)
       
      <div className="fixed inset-0 grid place-items-center bg-black/50  px-2 z-10">
   <div className="bg-white p-6 rounded-lg shadow-lg w-fit px-4">
-    <p className="text-xl font-semibold mb-4"> Are you sure you want to delete the ticket ?</p>
+    <p className="text-xl font-semibold mb-4 w-fit max-w-auto"> Are you sure you want to delete the ticket ?</p>
     <div className='flex flex-row justify-center gap-4'> 
-    <button className='h-fit w-fit px-6 py-2 border border-primary-1 text-primary-1 rounded-md' onClick={()=>{setOpenPopUp(false)}}>Cancel </button>
-    <button className='h-fit w-fit px-6 py-2 bg-red-500 hover:bg-red-700 text-quaternary-1 font-bold rounded-md' onClick={()=>handleDelete(deleteId)}>Delete</button>
+    <button className='h-fit w-fit px-6 py-2 border border-primary-1 text-primary-1 rounded-md font-bold cursor-pointer' onClick={()=>{setOpenPopUp(false)}}>Cancel </button>
+    <button className='h-fit w-fit px-6 py-2 bg-red-500 hover:bg-red-700 text-quaternary-1 font-bold rounded-md cursor-pointer' onClick={()=>handleDelete(deleteId)}>Delete</button>
     </div>
   </div>
 </div>
 }
-
+{
+  updateId!== null  &&  openUpdatePopup &&
+  <div className='fixed inset-0 bg-black/50 grid place-items-center'>
+    <div className='h-auto w-fit bg-quaternary-1 px-10 py-8 rounded-md space-y-4'>
+  <MultiplicationSignIcon size={30} className='cursor-pointer place-self-end-safe' onClick={()=>{setOpenUpdatePopup(false);updateIdFunc(updateId)} } /> 
+      <div className='flex flex-col gap-y-8'> 
+      <p> Update status for ID: {updateId} ?</p>
+      <select className='h-fit w-fit px-2 py-1 rounded-md border border-primary-1' defaultValue={updateValue}>
+        <option> Open </option>
+        <option> Pending </option>
+        <option> Resolved </option>
+      </select>
+      </div>
+    </div>
+  </div>
+}
 
 
     <div className='h-screen w-full px-3 md:px-4 bg-white '> 
@@ -103,8 +136,8 @@ function handleDelete(deleteId:string)
         <p className='max-w-6/7 overflow-hidden truncate'>{item.title} </p>
         <div className='flex gap-2 max-w-fit'> 
         <Link className='text-primary-1 font-bold h-fit w-fit px-2 py-2 border border-primary-1 rounded-md' to={`/viewTicket/:${item.id}`}>View</Link>
-        <button className='text-white font-bold h-fit w-fit px-2 py-2 bg-primary-1 rounded-md'>Update Status</button>
-        <Delete02Icon size={30} className='mt-2' onClick={()=>{showPopup(); setdeleteId(item.id)}}/>
+        <button className='text-white font-bold h-fit w-fit px-2 py-2 bg-primary-1 rounded-md cursor-pointer hover:bg-blue-950' onClick={()=>{setUpdateId(item.id); setOpenUpdatePopup(true)}}>Update Status</button>
+        <Delete02Icon size={30} className='mt-2 cursor-pointer' onClick={()=>{showPopup(); setdeleteId(item.id)}}/>
         </div>
         <div>
           <p>Status:  {item.status}</p>
