@@ -23,10 +23,10 @@ const ViewTicket = () => {
   const[date,setDate] = useState('');
   const[time, setTime] = useState('')
   useEffect(() => {
-  console.log(id);
+  //console.log(id);
   if(id){
   var slicedId = id.slice(1);
-  console.log(slicedId)
+  //console.log(slicedId)
   //console.log(typeof slicedId)
    //var nId = (slicedId)
   }

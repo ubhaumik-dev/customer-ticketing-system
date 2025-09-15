@@ -4,6 +4,7 @@ import { Delete02Icon, MultiplicationSignIcon } from "hugeicons-react";
 import '../App.css'
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+
 const Home = () => {
   
 interface dataProps{
@@ -22,8 +23,10 @@ interface dataProps{
   const[updateId, setUpdateId] = useState('');
   const[updateValue, setUpdateValue] = useState('')
   const[openUpdatePopup, setOpenUpdatePopup] = useState(false)
-  const[changedUpdated, setChangedUpdated] = useState(updateValue);
-  //const inputRef = useRef();
+  const[search, setSearch] = useState('');
+  const[filteredItems, setFilteredItems] = useState(data);
+ // const[selectedFilters, setSelectedFilters]= useState([]);
+ const[filter, setFilter] = useState(false);
   useEffect(() => {
     if(openPopUp || openUpdatePopup){
       document.body.style.overflow ='hidden'
@@ -47,33 +50,56 @@ function handleDelete(deleteId:string)
 
 function handleUpdate(updateId:string){
   //console.log("updateId", updateId)
+  //console.log("updated value", e.target.value);
   const storedData = localStorage.getItem('TicketData');
   if(storedData){
     const parsedData = JSON.parse(storedData);
     const filteredData:dataProps[] = parsedData.filter((ticket:dataProps)=> ticket.id=== updateId)
     setUpdateValue(filteredData[0].status)
   }
-  //console.log("updateValue is", updateValue)
 }
 
-
-function changeUpdateInLocalStorage()
-{
-  console.log("updateValue is", updateValue)
-  console.log("updateId is", updateId)
-  const item = localStorage.getItem('TicketData');
-  //console.log("typeof item", typeof item);
-  if(item)
-  {
-    const parsedData = JSON.parse(item);
-    //console.log(parsedData)
-    //console.log(typeof parsedData)
-    const filteredData:dataProps[] = parsedData.filter((ticket:dataProps)=> ticket.id=== updateId)
-    //console.log(filteredData[0])
+ function saveInLocalStorage()
+ { 
+  const storedData = localStorage.getItem('TicketData');
+  if(storedData){
+   const parsedData:dataProps[] = JSON.parse(storedData);
+   const updatedData = parsedData.map(ticket => ticket.id=== updateId ? {...ticket, status: updateValue}:ticket)
+   localStorage.setItem('TicketData', JSON.stringify(updatedData));
+   setData(updatedData);
   }
 }
 
-  
+//useEffect(() => {
+//handleFilterStatus;
+//  
+//}, [filter])
+
+
+
+const handleFilterStatus = (e: React.ChangeEvent<HTMLSelectElement>) =>{
+  //console.log(e.target.value)
+  const filtered = data.filter((item)=>{
+    if(e.target.value ==='Low')
+      return item.priority === 'Low';
+    else if(e.target.value === 'Medium')
+      return item.priority === 'Medium'
+    else if(e.target.value === 'High')
+      return item.priority=== 'High'
+    else if(e.target.value === 'All')
+      return item;
+      
+  })
+console.log(filtered);
+setFilteredItems(filtered);
+}
+
+const handleFilterPriority = (e: React.ChangeEvent<HTMLSelectElement> ) =>
+{
+
+}
+
+
   return (
     <div >
       <div className='navbar h-20 bg-primary-1 flex flex-row justify-evenly lg:h-30'>
@@ -105,15 +131,15 @@ function changeUpdateInLocalStorage()
   <MultiplicationSignIcon size={30} className='cursor-pointer place-self-end-safe' onClick={()=>{setOpenUpdatePopup(false)} } /> 
       <div className='flex flex-col gap-y-8'> 
       <p> Update status for ID: {updateId} ?</p>
-      <select className='h-fit w-fit px-2 py-1 rounded-md border border-primary-1'  defaultValue={updateValue} onChange={(e)=>{handleUpdate(e.target.value)}} >
+      <select className='h-fit w-fit px-2 py-1 rounded-md border border-primary-1'  value={updateValue} onChange={(e)=>{setUpdateValue(e.target.value)}} >
         <option> Open </option>
         <option> Pending </option>
         <option> Resolved </option>
       </select>
       </div>
-      <div className='flex flex-row justify-evenly md:justify-between'> 
+      <div className='flex flex-row  gap-4 md:justify-between'> 
       <button className='h-fit w-fit px-6 py-2 bg-quaternary-1 border border-primary-1 rounded-sm text-primary-1 font-bold'> Cancel</button>
-      <button className='h-fit w-fit px-8 py-2 bg-primary-1 rounded-sm text-quaternary-1 font-bold cursor-pointer' onClick={()=>{setOpenUpdatePopup(false);changeUpdateInLocalStorage();} }> OK</button>
+      <button className='h-fit w-fit px-6 py-2 bg-primary-1 rounded-sm text-quaternary-1 font-bold cursor-pointer' onClick={()=>{setOpenUpdatePopup(false); saveInLocalStorage(); } }> Update</button>
       </div>
     </div>
   </div>
@@ -122,26 +148,31 @@ function changeUpdateInLocalStorage()
 
     <div className='h-screen w-full px-3 md:px-4 bg-white '> 
      <div className='md:flex md:flex-row md:justify-between'>
-    <input placeholder='Search Query' className='px-2 h-10 w-5/7  mt-4 md:w-2/7 bg-white rounded-md border border-fuchsia-900 focus:outline-primary-1'/>
+    <input placeholder='Search Query' className='px-2 h-10 w-5/7  mt-4 md:w-2/7 bg-white rounded-md border border-fuchsia-900 focus:outline-primary-1' onChange={(e)=>{setSearch(e.target.value);}}/>
    <div className='flex flex-row justify-evenly mt-5 md:gap-x-4'> 
     <label className='mt-2'> Priority</label>
-    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white'>
-      <option> Low</option>
-      <option> Medium</option>
-      <option> High</option>
+    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white focus:outline-primary-1' onChange={(e)=>{ handleFilterStatus(e)}}>
+      <option value='All'> All</option>
+      <option value='Low'> Low</option>
+      <option value='Medium'> Medium</option>
+      <option value='High'> High</option>
     </select>
      <label className='mt-2'> Status</label>
-    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white'>
+    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white focus:outline-primary-1' onChange={(e)=>{handleFilterPriority(e)}}>
+      <option value='All'> All</option>
       <option value='Open'> Open</option>
       <option value='Pending'> Pending</option>
       <option value='Resolved'> Resolved</option>
     </select>
     </div>
    </div>
+   
    <div className=' lg:grid lg:grid-cols-3 lg:space-x-3'> 
     {
        
-      data.map(item =>
+      data.filter((item)=>{
+        return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
+      }).map(item =>
        
       <div className='h-auto max-h-auto w-auto max-w-auto space-y-4 px-2 py-4 border border-fuchsia-800 bg-quaternary-1 text-primary-1  rounded-md mt-10 ' key={item.id}>
         <div className='flex flex-row justify-between'> 
@@ -159,8 +190,6 @@ function changeUpdateInLocalStorage()
           <p>Created Date:  {item.date}</p>
         </div>
       </div>
-    
-    
       )
     }
     </div>
