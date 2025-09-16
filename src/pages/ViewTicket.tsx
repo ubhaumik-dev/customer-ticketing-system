@@ -60,14 +60,8 @@ const ViewTicket = () => {
         <p className='font-normal ml-2'> {id}</p> 
       </div> 
       <label htmlFor="title" className='text-primary-1 font-bold'>Title</label>
-      <input
-        id="title"
-        name="title"
-        type="text"
-        value ={title}
-        className='h-10 max-h-auto  w-full px-2 bg-white rounded-md border border-gray-300 focus:outline-violet-900'
-        readOnly
-      />
+      <div className='h-10 max-h-auto  w-full   rounded-md  focus:outline-none hover:cursor-pointer'> {title}
+      </div>
      
 
       <label htmlFor="description" className='mt-5 text-primary-1 font-bold'>Description</label>
@@ -76,15 +70,15 @@ const ViewTicket = () => {
         name="description"
         value = {description}
         rows={4}
-        className=' w-full resize-none bg-white rounded-md px-2 py-1 md:py-4 xl:py-8 border border-gray-300 focus:outline-violet-900'
+        className=' w-full resize-none bg-white rounded-md px-2 py-1 md:py-4 xl:py-8 border border-gray-300 focus:outline-none hover:cursor-pointer'
       readOnly
       ></textarea>
     
 <label className='mt-5 text-primary-1 font-bold' > Priority</label>
-<input value= {priority} className='h-8 w-full px-2 py-1 bg-white rounded-md ' readOnly/>
+<input value= {priority} className='h-8 w-full px-2 py-1 bg-white rounded-md focus:outline-none hover:cursor-pointer' readOnly/>
     
 <label className='mt-5 text-primary-1 font-bold'> Status </label>
-<input value={status} className='h-8 w-full px-2 py-1 bg-white rounded-md ' readOnly/>
+<input value={status} className='h-8 w-full px-2 py-1 bg-white rounded-md  focus:outline-none hover:cursor-pointer' readOnly/>
 <div className='flex flex-row'>
   <p className='font-bold'> Date created </p>
   <p className='ml-2'> {date}</p>

@@ -1,6 +1,6 @@
 import  { useEffect, useState } from 'react'
 import Oops from '../components/Oops';
-import { Delete02Icon, MultiplicationSignIcon } from "hugeicons-react";
+import { Delete02Icon} from "hugeicons-react";
 import '../App.css'
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -25,8 +25,10 @@ interface dataProps{
   const[openUpdatePopup, setOpenUpdatePopup] = useState(false)
   const[search, setSearch] = useState('');
   const[filteredItems, setFilteredItems] = useState(data);
- // const[selectedFilters, setSelectedFilters]= useState([]);
- const[filter, setFilter] = useState(false);
+  //const[filter, setFilter] = useState(false);
+  const[priority, setPriority] = useState('');
+  const[status, setStatus] = useState('');
+  
   useEffect(() => {
     if(openPopUp || openUpdatePopup){
       document.body.style.overflow ='hidden'
@@ -36,6 +38,21 @@ interface dataProps{
     }
    
   }, [openPopUp, openUpdatePopup])
+
+useEffect(() => {
+
+  setFilteredItems(data.filter((ticket)=>{
+    if(priority === 'All' || status=== 'All')
+    {
+      //console.log(status, priority)
+      return data;
+    }
+    else
+      return (!priority || ticket.priority === priority) && (!status || ticket.status === status)
+  }))
+  //console.log(status, priority)
+}, [status, priority])
+
 
 
 function handleDelete(deleteId:string)
@@ -70,34 +87,6 @@ function handleUpdate(updateId:string){
   }
 }
 
-//useEffect(() => {
-//handleFilterStatus;
-//  
-//}, [filter])
-
-
-
-const handleFilterStatus = (e: React.ChangeEvent<HTMLSelectElement>) =>{
-  //console.log(e.target.value)
-  const filtered = data.filter((item)=>{
-    if(e.target.value ==='Low')
-      return item.priority === 'Low';
-    else if(e.target.value === 'Medium')
-      return item.priority === 'Medium'
-    else if(e.target.value === 'High')
-      return item.priority=== 'High'
-    else if(e.target.value === 'All')
-      return item;
-      
-  })
-console.log(filtered);
-setFilteredItems(filtered);
-}
-
-const handleFilterPriority = (e: React.ChangeEvent<HTMLSelectElement> ) =>
-{
-
-}
 
 
   return (
@@ -128,17 +117,18 @@ const handleFilterPriority = (e: React.ChangeEvent<HTMLSelectElement> ) =>
   updateId!== null  &&  openUpdatePopup &&
   <div className='fixed inset-0 bg-black/50 grid place-items-center'>
     <div className='h-auto w-auto bg-quaternary-1 px-10 py-8 rounded-md space-y-4 md:px-14'>
-  <MultiplicationSignIcon size={30} className='cursor-pointer place-self-end-safe' onClick={()=>{setOpenUpdatePopup(false)} } /> 
-      <div className='flex flex-col gap-y-8'> 
+      <div className='flex flex-row justify-between'> 
       <p> Update status for ID: {updateId} ?</p>
-      <select className='h-fit w-fit px-2 py-1 rounded-md border border-primary-1'  value={updateValue} onChange={(e)=>{setUpdateValue(e.target.value)}} >
+      </div>
+    
+      <select className='h-fit w-fit px-2 py-1 rounded-md border border-primary-1 hover:cursor-pointer'  value={updateValue} onChange={(e)=>{setUpdateValue(e.target.value)}} >
         <option> Open </option>
         <option> Pending </option>
         <option> Resolved </option>
       </select>
-      </div>
+      
       <div className='flex flex-row  gap-4 md:justify-between'> 
-      <button className='h-fit w-fit px-6 py-2 bg-quaternary-1 border border-primary-1 rounded-sm text-primary-1 font-bold'> Cancel</button>
+      <button className='h-fit w-fit px-6 py-2 bg-quaternary-1 border border-primary-1 rounded-sm text-primary-1 font-bold hover:cursor-pointer' onClick={()=>setOpenUpdatePopup(false)}> Cancel</button>
       <button className='h-fit w-fit px-6 py-2 bg-primary-1 rounded-sm text-quaternary-1 font-bold cursor-pointer' onClick={()=>{setOpenUpdatePopup(false); saveInLocalStorage(); } }> Update</button>
       </div>
     </div>
@@ -148,17 +138,17 @@ const handleFilterPriority = (e: React.ChangeEvent<HTMLSelectElement> ) =>
 
     <div className='h-screen w-full px-3 md:px-4 bg-white '> 
      <div className='md:flex md:flex-row md:justify-between'>
-    <input placeholder='Search Query' className='px-2 h-10 w-5/7  mt-4 md:w-2/7 bg-white rounded-md border border-fuchsia-900 focus:outline-primary-1' onChange={(e)=>{setSearch(e.target.value);}}/>
+    <input placeholder='Search Query' className='px-2 h-10 w-5/7  mt-4 md:w-2/7 bg-white rounded-md border border-fuchsia-900 focus:outline-primary-1'  onChange={(e)=>{setSearch(e.target.value);}}/>
    <div className='flex flex-row justify-evenly mt-5 md:gap-x-4'> 
     <label className='mt-2'> Priority</label>
-    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white focus:outline-primary-1' onChange={(e)=>{ handleFilterStatus(e)}}>
+    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white focus:outline-primary-1'  onChange={(e) =>{setPriority(e.target.value)}}>
       <option value='All'> All</option>
       <option value='Low'> Low</option>
       <option value='Medium'> Medium</option>
       <option value='High'> High</option>
     </select>
      <label className='mt-2'> Status</label>
-    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white focus:outline-primary-1' onChange={(e)=>{handleFilterPriority(e)}}>
+    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white focus:outline-primary-1' onChange={(e) =>{setStatus(e.target.value)}} >
       <option value='All'> All</option>
       <option value='Open'> Open</option>
       <option value='Pending'> Pending</option>
@@ -166,11 +156,14 @@ const handleFilterPriority = (e: React.ChangeEvent<HTMLSelectElement> ) =>
     </select>
     </div>
    </div>
-   
+
+  
+
+
    <div className=' lg:grid lg:grid-cols-3 lg:space-x-3'> 
     {
        
-      data.filter((item)=>{
+      filteredItems.filter((item)=>{
         return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
       }).map(item =>
        

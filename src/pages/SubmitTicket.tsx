@@ -110,22 +110,7 @@ const SubmitTicket = () => {
       {formik.touched.priority && formik.errors.priority ? (
         <div>{formik.errors.priority}</div>
       ) : null}
-      <label className='mt-5 text-primary-1'> Status </label>
-   <select
-            name='status'
-            className='bg-white h-10 rounded-md border border-gray-300  focus:outline-violet-900 lg:w-1/2'
-            value={formik.values.status}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-           
-          > 
-            <option value="Open" className='rounded' id='low' defaultChecked>Open</option>
-            <option value="Pending" className='rounded' id='medium'>Pending</option>
-            <option value="Resolved" className='rounded' id='high'>Resolved</option>
-          </select>
-      {formik.touched.status && formik.errors.status ? (
-        <div>{formik.errors.status}</div>
-      ) : null}
+     
 
       <button type="submit" className='h-fit w-fit px-6 py-2 bg-primary-1 rounded-md mt-5 text-white cursor-pointer lg:m-auto lg:mt-7'>Submit</button>
     </form>
