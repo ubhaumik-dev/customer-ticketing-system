@@ -5,6 +5,9 @@ import './App.css'
 import Home from './pages/Home'
 import SubmitTicket from './pages/SubmitTicket'
 import ViewTicket from './pages/ViewTicket' 
+import Dashboard from './pages/Dashboard'
+
+
 
 function App() {
  
@@ -13,9 +16,10 @@ function App() {
     <>
      <BrowserRouter>
      <Routes>
-      <Route path = '/' element={<Home/>}/>
+      <Route path = '/' element={<Home  />}/>
       <Route path ='/submitTicket' element={<SubmitTicket/>}/>
       <Route path='/viewTicket/:id' element={<ViewTicket/>}/> 
+      <Route path='/dashboard' element={<Dashboard/>}/>
       </Routes>
      </BrowserRouter>
      

@@ -5,7 +5,8 @@ import '../App.css'
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-const Home = () => {
+
+const Home= () => {
   
 interface dataProps{
   title: string,
@@ -14,8 +15,11 @@ interface dataProps{
   priority:string,
   id: string,
   date: string,
-  time: string
+  time: string,
+  comments: object
 }
+
+
   const navigate = useNavigate();
   const[data, setData] = useState<dataProps[]>(JSON.parse(localStorage.getItem('TicketData') || '[]'))
   const[openPopUp, setOpenPopUp] = useState(false);
@@ -57,7 +61,7 @@ useEffect(() => {
 
 function handleDelete(deleteId:string)
 {
-  setData(data=> { 
+  setFilteredItems(data=> { 
     const updatedData = data.filter((item)=>item.id!== deleteId)
     localStorage.setItem('TicketData',JSON.stringify(updatedData));
     return updatedData
@@ -82,8 +86,9 @@ function handleUpdate(updateId:string){
   if(storedData){
    const parsedData:dataProps[] = JSON.parse(storedData);
    const updatedData = parsedData.map(ticket => ticket.id=== updateId ? {...ticket, status: updateValue}:ticket)
+   console.log("updatedData is", updatedData)
    localStorage.setItem('TicketData', JSON.stringify(updatedData));
-   setData(updatedData);
+   setFilteredItems(updatedData);
   }
 }
 
@@ -91,14 +96,17 @@ function handleUpdate(updateId:string){
 
   return (
     <div >
-      <div className='navbar h-20 bg-primary-1 flex flex-row justify-evenly lg:h-30'>
+      <div className='navbar h-20 bg-primary-1 flex flex-row justify-around lg:h-30'>
        <p className='text-quaternary-1 text-2xl font-extrabold my-auto md:text-3xl lg:text-4xl xl:text-5xl'> TicketNow </p>
-       <button className="bg-quaternary-1 h-fit w-fit px-6 py-2 rounded-md text-primary-1 my-auto cursor-pointer md:text-2xl  lg:px-6  xl:rounded-lg " onClick={() =>{navigate('/submitTicket')}} >Add ticket</button>
+       <div className='flex flex-row gap-2'> 
+       <button className="bg-quaternary-1 h-fit w-fit px-2 py-1 rounded-md text-primary-1 my-auto cursor-pointer md:text-lg  lg:px-4  xl:rounded-md " onClick={() =>{navigate('/submitTicket')}} >Add ticket</button>
+       <button className="bg-quaternary-1 h-fit w-fit px-2 py-1 rounded-md text-primary-1 my-auto cursor-pointer md:text-lg  lg:px-4  xl:rounded-md" onClick={() =>{navigate('/dashboard')}} >Dashboard </button>
+      </div>
       </div>
     
 
 
-     {data.length===0 ? <Oops/>:
+     {filteredItems.length===0 ? <Oops/>:
     <> 
     {
       openPopUp &&
@@ -167,7 +175,7 @@ function handleUpdate(updateId:string){
         return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
       }).map(item =>
        
-      <div className='h-auto max-h-auto w-auto max-w-auto space-y-4 px-2 py-4 border border-fuchsia-800 bg-quaternary-1 text-primary-1  rounded-md mt-10 ' key={item.id}>
+      <div className='h-auto max-h-auto w-auto max-w-auto space-y-4 px-2 py-4 border border-fuchsia-800 bg-quaternary-1 text-primary-1  rounded-md mt-10 shadow-xl/30 transition delay-100 duration-100 ease-in-out motion-reduce: hover:scale-102 hover:cursor-pointer' key={item.id}>
         <div className='flex flex-row justify-between'> 
         <p>ID: {item.id}</p>
         <p>{item.priority}</p>

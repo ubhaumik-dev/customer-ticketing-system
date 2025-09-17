@@ -11,7 +11,8 @@ interface dataType{
   status:string,
   id: string,
   date: string,
-  time: string
+  time: string,
+  comments: object
 }
 const SubmitTicket = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const SubmitTicket = () => {
       id:'',
       date:'',
       time:'',
+      comments: {}
     },
     validationSchema: Yup.object({
       title: Yup.string()
@@ -54,7 +56,7 @@ const SubmitTicket = () => {
       {
         data =[];
       }
-      //console.log(data)
+      console.log(data)
 
       data.push(values);
       localStorage.setItem('TicketData', JSON.stringify(data));
