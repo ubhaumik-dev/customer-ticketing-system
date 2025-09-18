@@ -2,6 +2,10 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+interface commentProp {
+  text: string,
+  date: string
+}
 interface dataProps{
   title: string,
   description:string,
@@ -10,7 +14,7 @@ interface dataProps{
   id: string,
   date: string,
   time: string,
-  comments: object
+  comments: Array<commentProp>
 }
 
 
@@ -54,20 +58,20 @@ const ViewTicket = () => {
   }, [])
   
   return (
-    <div className='w-auto h-screen max-h-screen px-3 bg-primary-1 flex flex-col items-center '>
+    <div className='w-auto h-full max-h-full  md:h-screen px-3 bg-primary-1 flex flex-col items-center '>
     <h1 className='text-quaternary-1 text-center font-bold text-3xl md:text-4xl mt-5'>Ticket ID {id}</h1>
-    <div className='flex flex-col h-fit w-fit border border-black space-y-2  rounded-md mx-auto my-4 py-6 px-4 bg-quaternary-1 mt-10 max-h-fit  md:w-1/2 xl:w-fit xl:px-12'>
+    <div className='flex flex-col h-fit w-fit border border-black space-y-2  rounded-md mx-auto my-4 py-6 px-4 bg-quaternary-1 mt-10 max-h-fit  md:w-6/7 xl:w-5/7 xl:rounded-lg xl:px-12'>
        <div className='flex flex-row'> 
          <p className='font-bold'> ID </p> 
         <p className='font-normal ml-2'> {id}</p> 
       </div> 
-      <div className='flex flex-row gap-2'> 
+      <div className='flex flex-col gap-2'> 
       <div className='text-primary-1 font-bold'>Title</div>
       <div className='h-fit max-h-auto  w-full  rounded-md'> {title} </div>
       </div>
-      <div className='flex flex-row gap-1'> 
+      <div className='flex flex-col gap-1'> 
       <div  className=' text-primary-1 font-bold'>Description</div>
-      <div className='w-full resize-none  rounded-md px-2'>{description}</div>
+      <div className='w-full resize-none  rounded-md'>{description}</div>
       </div>
       <div className='flex flex-row'> 
       <div className=' text-primary-1 font-bold' > Priority</div>

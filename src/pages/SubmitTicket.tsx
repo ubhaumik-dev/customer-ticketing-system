@@ -4,6 +4,11 @@ import * as Yup from 'yup';
 
 import { useNavigate } from 'react-router-dom';
 
+interface commentProp {
+  text: string,
+  date: string
+}
+
 interface dataType{
   title: string,
   description:string,
@@ -12,7 +17,7 @@ interface dataType{
   id: string,
   date: string,
   time: string,
-  comments: object
+  comments: Array<commentProp>
 }
 const SubmitTicket = () => {
   const navigate = useNavigate();
@@ -28,7 +33,7 @@ const SubmitTicket = () => {
       id:'',
       date:'',
       time:'',
-      comments: {}
+      comments: []
     },
     validationSchema: Yup.object({
       title: Yup.string()

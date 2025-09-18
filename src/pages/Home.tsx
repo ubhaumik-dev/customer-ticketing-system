@@ -4,7 +4,7 @@ import { Delete02Icon} from "hugeicons-react";
 import '../App.css'
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-
+import Navbar from '../components/Navbar';
 
 const Home= () => {
   
@@ -16,7 +16,7 @@ interface dataProps{
   id: string,
   date: string,
   time: string,
-  comments: object
+  comments: Array<string>
 }
 
 
@@ -96,13 +96,7 @@ function handleUpdate(updateId:string){
 
   return (
     <div >
-      <div className='navbar h-20 bg-primary-1 flex flex-row justify-around lg:h-30'>
-       <p className='text-quaternary-1 text-2xl font-extrabold my-auto md:text-3xl lg:text-4xl xl:text-5xl'> TicketNow </p>
-       <div className='flex flex-row gap-2'> 
-       <button className="bg-quaternary-1 h-fit w-fit px-2 py-1 rounded-md text-primary-1 my-auto cursor-pointer md:text-lg  lg:px-4  xl:rounded-md " onClick={() =>{navigate('/submitTicket')}} >Add ticket</button>
-       <button className="bg-quaternary-1 h-fit w-fit px-2 py-1 rounded-md text-primary-1 my-auto cursor-pointer md:text-lg  lg:px-4  xl:rounded-md" onClick={() =>{navigate('/dashboard')}} >Dashboard </button>
-      </div>
-      </div>
+     <Navbar/>
     
 
 
