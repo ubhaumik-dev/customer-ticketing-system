@@ -2,7 +2,6 @@ import  { useEffect, useState } from 'react'
 import Oops from '../components/Oops';
 import { Delete02Icon} from "hugeicons-react";
 import '../App.css'
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
@@ -20,7 +19,7 @@ interface dataProps{
 }
 
 
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const[data, setData] = useState<dataProps[]>(JSON.parse(localStorage.getItem('TicketData') || '[]'))
   const[openPopUp, setOpenPopUp] = useState(false);
   const[deleteId, setdeleteId] = useState('');

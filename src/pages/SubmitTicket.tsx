@@ -1,7 +1,7 @@
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-
+import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 interface commentProp {
@@ -23,9 +23,7 @@ const SubmitTicket = () => {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      //id:crypto.randomUUID(),
-      //date: new Date().toLocaleDateString(),
-      //time: new Date().toLocaleTimeString(),
+     
       title: '',
       description: '',
       priority:'Low',
@@ -61,7 +59,7 @@ const SubmitTicket = () => {
       {
         data =[];
       }
-      console.log(data)
+      
 
       data.push(values);
       localStorage.setItem('TicketData', JSON.stringify(data));

@@ -1,0 +1,28 @@
+ <div className="h-auto max-h-auto mt-6 py-6 flex flex-col gap-5">
+          {data.map((item) => (
+            <div key={item.id} className="h-full w-full py-6 border-dashed border-4 rounded-md border-red-400">
+              <p className="text-primary-1 font-bold mx-auto text-md text-center">Ticket ID: {item.id}</p>
+              <div className="flex flex-col gap-2"> 
+              {item.comments && item.comments.length > 0 ? (
+                item.comments.map((comment, index) => (
+                  <div className="flex flex-row gap-5" key={index}>
+                    <p className="ml-2">{comment.text}</p>
+                    <p> {comment.date}</p>
+                  </div>
+                ))
+              ) : (
+                <p className="ml-2"> No comment to show </p>
+              )}
+              </div>
+            </div>
+          ))}
+</div>
+
+ <div className="h-fit w-fit bg-primary-1 px-6 py-2 text-quaternary-1 ">
+              <p> Total Tickets: {data.length}</p>
+              <div> 
+              <p>Tickets by status: </p>
+              <p> {data.filter((item)=>item.status==='High').length}</p>
+              <p> {data.filter(item=>item.status==='Low').length}</p>
+              </div>
+            </div>
