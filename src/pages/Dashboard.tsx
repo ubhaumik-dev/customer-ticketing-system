@@ -208,6 +208,7 @@ const Dashboard = () => {
                   <Comment01Icon size={20}
                     className="h-fit w-fit px-1 py-2 text-xs ml-2 text-primary-1 font-bold rounded-md my-auto hover:cursor-pointer"
                     onClick={() => {
+                      
                       setCommentPopUp(true);
                       setCommentId(item.id);
                     }}
@@ -227,7 +228,8 @@ const Dashboard = () => {
                 rows={3}
                 value={commentValue}
                 onChange={(e) => {
-                  setCommentValue(e.target.value);
+                 
+                setCommentValue(e.target.value);
                 }}
               ></textarea>
               <div className="flex flex-row mx-auto gap-2">
@@ -243,8 +245,15 @@ const Dashboard = () => {
                 <button
                   className="h-fit w-fit px-2 py-2 bg-primary-1 text-quaternary-1 rounded-md mt-5 cursor-pointer"
                   onClick={() => {
-                    setCommentPopUp(false);
+                    if(commentValue === '')
+                    {
+                      alert("Comment cannot be empty")
+                    }
+                    else{
+                      setCommentPopUp(false);
                     handleComment(commentValue);
+                    }
+                    
                   }}
                 >
                   
@@ -274,7 +283,7 @@ const Dashboard = () => {
                   </tbody>
                   </table>
                 </div>
-              ) : <p className="text-center"> No comment to show </p>
+              ) : <p className="text-center my-5"> No comment to show </p>
             }
           </div>
         )

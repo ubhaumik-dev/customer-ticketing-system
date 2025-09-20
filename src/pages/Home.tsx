@@ -50,6 +50,7 @@ useEffect(() => {
       //console.log(status, priority)
       return data;
     }
+    
     else
       return (!priority || ticket.priority === priority) && (!status || ticket.status === status)
   }))

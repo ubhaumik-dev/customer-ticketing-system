@@ -115,9 +115,10 @@ const SubmitTicket = () => {
       {formik.touched.priority && formik.errors.priority ? (
         <div>{formik.errors.priority}</div>
       ) : null}
-     
-
+     <div className='flex flex-row gap-2 max-w-full md:gap-10 xl:gap-16 mx-auto'> 
+      <button type="submit" className='h-fit w-fit px-4 py-2 bg-quaternary-1 rounded-md mt-5 text-primary-1 border border-primary-1 font-bold cursor-pointer lg:m-auto lg:mt-7' onClick={()=>navigate('/')}>Go Back</button>
       <button type="submit" className='h-fit w-fit px-6 py-2 bg-primary-1 rounded-md mt-5 text-white cursor-pointer lg:m-auto lg:mt-7'>Submit</button>
+    </div>
     </form>
     </div>
   </>

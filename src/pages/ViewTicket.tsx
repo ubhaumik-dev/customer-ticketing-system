@@ -63,9 +63,9 @@ setComments(filteredData[0].comments.map(item => ({date: item.date,text: item.te
   }, [])
   
   return (
-    <div className='w-auto min-h-screen px-3 bg-primary-1 flex flex-col items-center '>
+    <div className='w-screen min-h-screen px-3 bg-primary-1 flex flex-col items-center '>
     <h1 className='text-quaternary-1 text-center font-bold text-3xl md:text-4xl mt-5'>Ticket ID {id}</h1>
-    <div className='flex flex-col h-fit w-fit max-w-auto border border-black space-y-2  rounded-md mx-auto my-4 py-6 px-4 bg-quaternary-1 mt-10 max-h-fit  md:w-1/2 xl:w-5/7 xl:rounded-lg xl:px-12'>
+    <div className='flex flex-col h-fit w-3/4 max-w-3/4 border border-black space-y-2 md:w-1/2 md:max-w-1/2 rounded-md mx-auto my-4 py-12 px-4 bg-quaternary-1 mt-5 '>
        
       <div className='flex flex-col gap-2'> 
       <div className='text-primary-1 font-bold'>Title</div>
@@ -80,8 +80,8 @@ setComments(filteredData[0].comments.map(item => ({date: item.date,text: item.te
       <div  className='h- fit w-full px-2 rounded-md '> {priority} </div>
     </div>
     <div className='flex flex-row gap-1'>
-    <div className=' text-primary-1 font-bold'> Status </div>
-    <div className='h-fit w-full px-2   rounded-md  '>{status} </div>
+    <div className='text-primary-1 font-bold '> Status </div>
+    <div className='h-fit w-full px-2  rounded-md  '>{status} </div>
     </div>
 <div className='flex flex-row gap-2'>
   <p className='font-bold'> Date created </p>
@@ -95,12 +95,12 @@ setComments(filteredData[0].comments.map(item => ({date: item.date,text: item.te
 
   <p className='font-bold '> Comments </p>
 <div className='flex flex-col gap-2' >
-    {comments?.map((item,id) =>(
+    {  comments && comments.length>0 ?comments?.map((item,id) =>(
       <div key={id}> 
       <p className='max-w-80'>{item.text}</p>
       <p>{item.date}</p>
       </div>
-    ))}
+    )) : <p> No comment to show </p>} 
 </div>
 <Link className='h-fit w-fit px-6 py-2 bg-primary-1 text-quaternary-1 font-bold rounded-md cursor-pointer' to='/'> Back </Link>
     </div>
