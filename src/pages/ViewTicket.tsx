@@ -95,7 +95,7 @@ setComments(filteredData[0].comments.map(item => ({date: item.date,text: item.te
 
   <p className='font-bold '> Comments </p>
 <div className='flex flex-col gap-2' >
-    {  comments && comments.length>0 ?comments?.map((item,id) =>(
+    {  comments && comments.length>0 ? comments.map((item,id) =>(
       <div key={id}> 
       <p className='max-w-80'>{item.text}</p>
       <p>{item.date}</p>

@@ -96,7 +96,7 @@ const Dashboard = () => {
             <Bar
             className="mt-2"
               data={{
-                labels: [...new Set(data.map((item) => item.status))],
+                labels: ["Pending", "Open", "Resolved"],
                 datasets: [
                   {
                     label: "Status",
@@ -199,8 +199,8 @@ const Dashboard = () => {
                 <td className="overflow-hidden truncate max-w-10 ">
                   {item.description}
                 </td>
-                <td className="text-center ">{item.priority}</td>
-                <td className="md:text-center">{item.status} </td>
+                <td className="flex flex-rpw justify-center"><p className={item.priority==='Low'? 'h-fit w-fit px-1 py-1 bg-green-200 text-green-600 text-center rounded-sm font-bold': item.priority=== 'High' ? 'h-fit w-fit px-1 py-1 bg-red-300 font-bold rounded-sm text-red-800 text-center': 'text-yellow-600 text-center bg-yellow-200 h-fit w-fit px-1 py-1 rounded-sm font-bold'}>{item.priority}</p></td>
+                <td className='text-center'>{item.status} </td>
                 <td className="md:text-center"> {item.date}</td>
                 <td className=" flex flex-row   md:items-center md:justify-center h-16">
                   <Link className="font-bold bg-primary-1 my-auto text-quaternary-1 h-fit w-fit px-1 py-1 rounded-md cursor-pointer" to={`/viewTicket/:${item.id}`}> View

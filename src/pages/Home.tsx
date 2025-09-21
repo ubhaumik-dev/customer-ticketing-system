@@ -6,7 +6,12 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 const Home= () => {
-  
+
+interface commentProp {
+    text: string;
+    date: string;
+  }
+
 interface dataProps{
   title: string,
   description:string,
@@ -15,7 +20,7 @@ interface dataProps{
   id: string,
   date: string,
   time: string,
-  comments: Array<string>
+  comments: Array<commentProp>
 }
 
 
@@ -72,6 +77,8 @@ function handleDelete(deleteId:string)
 function handleUpdate(updateId:string){
   //console.log("updateId", updateId)
   //console.log("updated value", e.target.value);
+  setOpenUpdatePopup(true); 
+  setUpdateId(updateId); 
   const storedData = localStorage.getItem('TicketData');
   if(storedData){
     const parsedData = JSON.parse(storedData);
@@ -100,8 +107,33 @@ function handleUpdate(updateId:string){
     
 
 
-     {filteredItems.length===0 ? <Oops/>:
-    <> 
+     { status==='' && priority==='' && filteredItems.length===0 ? <Oops/>: (status!=='' || priority!=='') && filteredItems.length===0 ?
+     <>
+     <div className='px-3 md:px-4'> 
+       <div className='md:flex md:flex-row md:justify-between'>
+    <input placeholder='Search Query' className='px-2 h-10 w-5/7  mt-4 md:w-2/7 bg-white rounded-md border border-fuchsia-900 focus:outline-primary-1'  onChange={(e)=>{setSearch(e.target.value);}}/>
+   <div className='flex flex-row justify-evenly mt-5 md:gap-x-4'> 
+    <label className='mt-2'> Priority</label>
+    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white focus:outline-primary-1' value={priority} onChange={(e) =>{setPriority(e.target.value)}}>
+      <option value='All'> All</option>
+      <option value='Low'> Low</option>
+      <option value='Medium'> Medium</option>
+      <option value='High'> High</option>
+    </select>
+     <label className='mt-2'> Status</label>
+    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white focus:outline-primary-1' value={status} onChange={(e) =>{setStatus(e.target.value)}} >
+      <option value='All'> All</option>
+      <option value='Open'> Open</option>
+      <option value='Pending'> Pending</option>
+      <option value='Resolved'> Resolved</option>
+    </select>
+    </div>
+   </div>
+<p className='font-bold text-lg text-center mt-5'> No data to show</p>
+</div>
+     </>
+     :
+     <>
     {
       openPopUp &&
       
@@ -143,14 +175,14 @@ function handleUpdate(updateId:string){
     <input placeholder='Search Query' className='px-2 h-10 w-5/7  mt-4 md:w-2/7 bg-white rounded-md border border-fuchsia-900 focus:outline-primary-1'  onChange={(e)=>{setSearch(e.target.value);}}/>
    <div className='flex flex-row justify-evenly mt-5 md:gap-x-4'> 
     <label className='mt-2'> Priority</label>
-    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white focus:outline-primary-1'  onChange={(e) =>{setPriority(e.target.value)}}>
+    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white focus:outline-primary-1' value={priority} onChange={(e) =>{setPriority(e.target.value)}}>
       <option value='All'> All</option>
       <option value='Low'> Low</option>
       <option value='Medium'> Medium</option>
       <option value='High'> High</option>
     </select>
      <label className='mt-2'> Status</label>
-    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white focus:outline-primary-1' onChange={(e) =>{setStatus(e.target.value)}} >
+    <select className='h-fit w-fit px-2 py-1 border border-black rounded-md ml-2 bg-white focus:outline-primary-1' value={status} onChange={(e) =>{setStatus(e.target.value)}} >
       <option value='All'> All</option>
       <option value='Open'> Open</option>
       <option value='Pending'> Pending</option>
@@ -159,7 +191,7 @@ function handleUpdate(updateId:string){
     </div>
    </div>
 
-  
+
 
 
    <div className=' lg:grid lg:grid-cols-3 lg:space-x-3'> 
@@ -169,15 +201,15 @@ function handleUpdate(updateId:string){
         return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search)
       }).map(item =>
        
-      <div className='h-auto max-h-auto w-auto max-w-auto space-y-4 px-2 py-4 border border-fuchsia-800 bg-quaternary-1 text-primary-1  rounded-md mt-10 shadow-xl/30 transition delay-100 duration-100 ease-in-out motion-reduce: hover:scale-102 hover:cursor-pointer' key={item.id}>
+      <div className='h-auto max-h-auto w-auto max-w-auto space-y-4 px-2 py-4 border border-fuchsia-800 bg-quaternary-1 text-primary-1  rounded-md mt-10 shadow-xl/30 hover:scale-102' key={item.id}>
         <div className='flex flex-row justify-between'> 
-        <p>ID: {item.id}</p>
-        <p>{item.priority}</p>
+        <p className='font-bold'>ID: {item.id}</p>
+       <p className={item.priority==='Low'? 'h-fit w-fit px-1 py-1 bg-green-200 text-green-600 text-center rounded-sm font-bold': item.priority=== 'High' ? 'h-fit w-fit px-1 py-1 bg-red-300 font-bold rounded-sm text-red-800 text-center': 'text-yellow-600 text-center bg-yellow-200 h-fit w-fit px-1 py-1 rounded-sm font-bold'}>{item.priority}</p>
         </div>
         <p className='max-w-6/7 overflow-hidden truncate'>{item.title} </p>
         <div className='flex gap-2 max-w-fit'> 
         <Link className='text-primary-1 font-bold h-fit w-fit px-2 py-2 border border-primary-1 rounded-md' to={`/viewTicket/:${item.id}`}>View</Link>
-        <button className='text-white font-bold h-fit w-fit px-2 py-2 bg-primary-1 rounded-md cursor-pointer hover:bg-blue-950' onClick={()=>{setUpdateId(item.id); setOpenUpdatePopup(true); handleUpdate(item.id)}}>Update Status</button>
+        <button className='text-white font-bold h-fit w-fit px-2 py-2 bg-primary-1 rounded-md cursor-pointer hover:bg-blue-950' onClick={()=>{ handleUpdate(item.id)}}>Update Status</button>
         <Delete02Icon size={30} className='mt-2 cursor-pointer' onClick={()=>{setOpenPopUp(true); setdeleteId(item.id)}}/>
         </div>
         <div>
